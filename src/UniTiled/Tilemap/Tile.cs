@@ -19,15 +19,16 @@ namespace UniTiled {
 			tileObject.AddComponent("SpriteRenderer");
 			SpriteRenderer sr = (SpriteRenderer)tileObject.GetComponent("SpriteRenderer");
 			
-			Sprite[] sprites = Resources.LoadAll<Sprite>("Tiles/Test");
+			Sprite[] sprites = Resources.LoadAll<Sprite>("Textures/Tiles/Test");
 			string[] names = new string[sprites.Length];
 
 			for (int i = 0; i < names.Length; i++) {
 				names[i] = sprites[i].name;
 			}
 
-			sr.sprite = sprites[Array.IndexOf(names, "Test_1")];
-
+			if (gid > 0) {
+				sr.sprite = sprites[Array.IndexOf(names, "Test_" + (gid - 1))];
+			}
 
 		}
 

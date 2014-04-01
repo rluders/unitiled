@@ -46,12 +46,33 @@ namespace UniTiled {
 
 		public void Render() {
 
+			Transform go = layerObject.transform;
+
+			// @TODO put it into Tile or/and Tilemap properties
+			float x_size = .3f,
+				  y_size = .3f;
+
+			int col = 0,
+				row = (int)Size.y;
+
 			foreach (Tile tile in Tiles) {
+
+				Vector3 position = new Vector3(
+					go.position.x + (col * x_size),
+					go.position.y + (row * y_size),
+					go.position.z);
 				
 				tile.SetPosition(
-					layerObject.transform.position,
-					layerObject.transform.rotation);
+					position,
+					go.rotation);
 				tile.AttachTo(layerObject);
+
+				col++;
+
+				if (col >= (int)Size.x) {
+					col = 0;
+					row--;
+				}
 
 			}
 
