@@ -9,7 +9,7 @@ namespace UniTiled {
 
 		// @TODO List os prefabs for tiles
 		public TextAsset mapAsset;
-		Tilemap tilemap;
+		public Tilemap tilemap;
 		
 		public void LoadTilemap() {
 

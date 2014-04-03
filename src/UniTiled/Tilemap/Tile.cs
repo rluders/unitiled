@@ -15,11 +15,17 @@ namespace UniTiled {
 
 			Gid = gid;
 			tileObject = new GameObject("tile_" + gid);
+
+			// GameObject go = GameObject.Find("_Tilemap");
+			// Tileset tileset = go.GetComponent<TilemapComponent>().tilemap.Tilesets.GetFromGid(gid);
+			Tileset tileset = Tilemap.Tilesets.GetFromGid(gid);
+			Debug.Log("Gid: " + gid);
+
 			// @TEST
 			tileObject.AddComponent("SpriteRenderer");
 			SpriteRenderer sr = (SpriteRenderer)tileObject.GetComponent("SpriteRenderer");
 			
-			Sprite[] sprites = Resources.LoadAll<Sprite>("Textures/Tiles/Test");
+			Sprite[] sprites = Resources.LoadAll<Sprite>("Textures/Tiles/" + tileset.Name);
 			string[] names = new string[sprites.Length];
 
 			for (int i = 0; i < names.Length; i++) {
@@ -27,7 +33,7 @@ namespace UniTiled {
 			}
 
 			if (gid > 0) {
-				sr.sprite = sprites[Array.IndexOf(names, "Test_" + (gid - 1))];
+				sr.sprite = sprites[Array.IndexOf(names, tileset.Name + "_" + (gid))];
 			}
 
 		}

@@ -48,7 +48,7 @@ namespace UniTiled {
 
 			Transform go = layerObject.transform;
 
-			// @TODO put it into Tile or/and Tilemap properties
+			// @TODO put it into Tile or/and TilemapComponent properties
 			float x_size = .3f,
 				  y_size = .3f;
 

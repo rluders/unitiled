@@ -6,6 +6,30 @@ using UniTiled;
 
 namespace UniTiled {
 
+	public class TilesetList : List<Tileset> {
+
+		public Tileset Last() {
+
+			return this[this.Count - 1];
+
+		}
+
+		public Tileset GetFromGid(int gid) {
+
+			foreach (Tileset tileset in this) {
+
+				if (tileset.HasTileGid(gid)) {
+					return tileset;
+				}
+
+			}
+
+			return null;
+
+		}
+
+	}
+
 	public class Tilemap {
 
 		XmlDocument xmlDoc;		
@@ -13,13 +37,13 @@ namespace UniTiled {
 
 		public Vector2 MapSize { get; set; }
 		public Vector2 TileSize { get; set; }
-		public List<Tileset> Tilesets { get; set; }
+		public static TilesetList Tilesets { get; set; }
 		public List<Layer> Layers { get; set; }
 
 		public Tilemap(GameObject obj) {
 
 			mapObject = obj;
-			Tilesets = new List<Tileset>();
+			Tilesets = new TilesetList();
 			Layers = new List<Layer>();
 
 		}
@@ -54,7 +78,14 @@ namespace UniTiled {
 					tilesetNode.Attributes["name"].Value,
 					new Vector2(
 						float.Parse(tilesetNode.Attributes["tilewidth"].Value),
-						float.Parse(tilesetNode.Attributes["tileheight"].Value)));
+						float.Parse(tilesetNode.Attributes["tileheight"].Value)),
+					int.Parse(tilesetNode.Attributes["firstgid"].Value));
+
+				// update lastgird value on last loaded tileset
+				if (Tilesets.Count > 0) {
+					Tilesets.Last().LastGid = int.Parse(tilesetNode.Attributes["firstgid"].Value) - 1;
+				}
+
 
 				Tilesets.Add(tileset);
 
@@ -81,8 +112,6 @@ namespace UniTiled {
 		}
 
 		public void Build() {
-
-			Debug.Log("Build map");
 
 			foreach (Layer layer in Layers) {
 				layer.AttachTo(mapObject);
