@@ -95,6 +95,7 @@ namespace UniTiled {
 
 		void LoadLayers(XmlNodeList nodes) {
 
+			int depth = 0;
 			foreach (XmlNode layerNode in nodes) {
 
 				Layer layer = new Layer(
@@ -104,7 +105,10 @@ namespace UniTiled {
 						float.Parse(layerNode.Attributes["height"].Value)),
 					layerNode.SelectNodes("/map/layer[@name='" 
 										+ layerNode.Attributes["name"].Value 
-										+ "']/data/tile"));
+										+ "']/data/tile"),
+					depth);
+
+				depth--;
 
 				Layers.Add(layer);
 			}

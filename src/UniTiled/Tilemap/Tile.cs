@@ -5,6 +5,7 @@ using System.Collections.Generic;
 
 namespace UniTiled {
 
+	// @todo optimize this class
 	public class Tile {
 
 		GameObject tileObject;
@@ -16,12 +17,19 @@ namespace UniTiled {
 			Gid = gid;
 			tileObject = new GameObject("tile_" + gid);
 
-			// GameObject go = GameObject.Find("_Tilemap");
-			// Tileset tileset = go.GetComponent<TilemapComponent>().tilemap.Tilesets.GetFromGid(gid);
-			Tileset tileset = Tilemap.Tilesets.GetFromGid(gid);
-			Debug.Log("Gid: " + gid);
+			// if it have no texture so we destroy the tile
+			if (!LoadTexture()) {
+				// @todo make it better
+				GameObject.DestroyImmediate(tileObject);
+				tileObject = null;
+			}
 
-			// @TEST
+		}
+
+		protected bool LoadTexture() {
+
+			Tileset tileset = Tilemap.Tilesets.GetFromGid(Gid);
+
 			tileObject.AddComponent("SpriteRenderer");
 			SpriteRenderer sr = (SpriteRenderer)tileObject.GetComponent("SpriteRenderer");
 			
@@ -32,22 +40,41 @@ namespace UniTiled {
 				names[i] = sprites[i].name;
 			}
 
-			if (gid > 0) {
-				sr.sprite = sprites[Array.IndexOf(names, tileset.Name + "_" + (gid))];
+			if (Gid > 0) {
+
+				// every tileset for unity starts with index zero, so I neet to calculate the tile index based on gid
+				int first = tileset.FirstGid == 0 ? 1 : tileset.FirstGid,
+					tile_gid = Math.Abs(first - Gid),
+					index = Array.IndexOf(names, tileset.Name + "_" + tile_gid);
+
+				if (index <= sprites.Length) {
+
+					sr.sprite = sprites[index];
+					return true;
+				
+				}
+
+			}
+
+			return false;
+
+		}
+
+		public void SetPosition(Vector3 position, Quaternion rotation) {
+
+			if (tileObject) {
+				tileObject.transform.position = position;
+				tileObject.transform.rotation = rotation;
 			}
 
 		}
 
-		public void SetPosition(Vector2 position, Quaternion rotation) {
+		public void AttachTo(GameObject layer) {
 
-			tileObject.transform.position = position;
-			tileObject.transform.rotation = rotation;
-
-		}
-
-		public void AttachTo(GameObject map) {
-
-			tileObject.transform.parent = map.transform;
+			// attach only if tile object exists
+			if (tileObject) {
+				tileObject.transform.parent = layer.transform;
+			}
 
 		}
 		

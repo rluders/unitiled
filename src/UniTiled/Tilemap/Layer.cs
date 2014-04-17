@@ -12,11 +12,14 @@ namespace UniTiled {
 		public string Name { get; private set; }
 		public Vector2 Size { get; private set; }
 		public List<Tile> Tiles { get; private set; }
+		public int Depth { get; set; }
 
-		public Layer(string name, Vector2 size, XmlNodeList tileNodes) {
+		public Layer(string name, Vector2 size, XmlNodeList tileNodes, int depth = 0) {
 
 			Name = name;
 			Size = size;
+			Depth = depth;
+
 			layerObject = new GameObject(name);
 
 			LoadTiles(tileNodes);
@@ -47,7 +50,7 @@ namespace UniTiled {
 		public void Render() {
 
 			Transform go = layerObject.transform;
-
+			
 			// @TODO put it into Tile or/and TilemapComponent properties
 			float x_size = .3f,
 				  y_size = .3f;
@@ -56,15 +59,12 @@ namespace UniTiled {
 				row = (int)Size.y;
 
 			foreach (Tile tile in Tiles) {
-
-				Vector3 position = new Vector3(
-					go.position.x + (col * x_size),
-					go.position.y + (row * y_size),
-					go.position.z);
 				
 				tile.SetPosition(
-					position,
-					go.rotation);
+					new Vector3(
+						go.position.x + (col * x_size),
+						go.position.y + (row * y_size),
+						0), go.rotation);
 				tile.AttachTo(layerObject);
 
 				col++;
@@ -75,6 +75,8 @@ namespace UniTiled {
 				}
 
 			}
+
+			go.transform.position = new Vector3(0, 0, Depth);
 
 		}
 
