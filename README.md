@@ -17,7 +17,7 @@ UniTiled is a Tiled Map Editor parser for Unity 3D. It will help you to load you
 
 ## Help us
 
-If you like this project, you can help me to keep it running. Through paypal you can make a donation, I would be really grateful for your help. Oh, I'd almost forgot, you can also use Gittip.
+If you like this project, you can help me to keep it running. Through paypal you can make a donation, I would be really grateful for your help. Oh, I'd almost forgot, you can also use [Gittip](https://www.gittip.com/rluders).
 
 [<img src="http://www.luders.com.br/_/buy-me-a-coffee.png">](http://goo.gl/E7ab50)
 
